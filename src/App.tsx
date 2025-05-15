@@ -59,28 +59,28 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 text-gray-900 font-sans">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white shadow-md border-b border-blue-200 p-6 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 rounded-b-lg">
-        <h1 className="text-3xl font-extrabold text-blue-700 tracking-tight">
+      <header className="sticky top-0 z-40 bg-white shadow-md border-b border-blue-200 p-6 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 rounded-b-lg">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-blue-700">
           Remote Job Board
         </h1>
-        <p className="text-sm text-blue-500">
+        <p className="text-sm text-blue-500 text-center sm:text-left">
           Find your next remote opportunity easily
         </p>
       </header>
 
       {/* Filter Bar */}
-      <section className="sticky top-[80px] z-30 bg-white border border-blue-200 p-6 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 rounded-lg shadow-lg my-8">
+      <section className="sticky top-[85px] z-30 bg-white border border-blue-200 p-4 sm:p-6 max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 rounded-lg shadow-md mt-6 mb-6 ">
         <Input
           type="text"
           placeholder="Search by job title"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border-blue-300 focus:border-blue-600 focus:ring-blue-600 rounded-md shadow-md text-base placeholder-blue-400"
+          className="border-blue-300 focus:border-blue-600 focus:ring-blue-600 text-base rounded-md shadow-sm"
           aria-label="Search jobs by title"
         />
 
         <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger className="w-full rounded-md border border-blue-300 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 text-base">
+          <SelectTrigger className="w-full rounded-md border border-blue-300 shadow-sm text-base focus:ring-2 focus:ring-blue-600">
             <SelectValue placeholder="Select job type" />
           </SelectTrigger>
           <SelectContent>
@@ -89,7 +89,6 @@ function App() {
             <SelectItem value="part-time">Part-Time</SelectItem>
             <SelectItem value="remote">Remote</SelectItem>
             <SelectItem value="contract">Contract</SelectItem>
-            <SelectItem value="freelance">Freelance</SelectItem>
           </SelectContent>
         </Select>
 
@@ -98,13 +97,16 @@ function App() {
           placeholder="Filter by location"
           value={locationFilter}
           onChange={(e) => setLocationFilter(e.target.value)}
-          className="border-blue-300 focus:border-blue-600 focus:ring-blue-600 rounded-md shadow-md text-base placeholder-blue-400"
+          className="border-blue-300 focus:border-blue-600 focus:ring-blue-600 text-base rounded-md shadow-sm"
           aria-label="Filter jobs by location"
         />
       </section>
 
+      {/* Responsive Divider */}
+      <hr className="max-w-7xl mx-auto border-t border-blue-200 mb-6" />
+
       {/* Jobs Grid */}
-      <main className="max-w-7xl mx-auto p-6 grid gap-8 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence>
           {filteredJobs.length === 0 && (
             <p className="text-center text-blue-400 col-span-full mt-12 text-lg font-medium italic">
@@ -120,28 +122,27 @@ function App() {
               exit={{ opacity: 0, y: 20 }}
               layout
               whileHover={{
-                scale: 1.04,
-                boxShadow: "0 20px 35px rgba(59, 130, 246, 0.3)",
+                scale: 1.03,
+                boxShadow: "0 12px 28px rgba(59, 130, 246, 0.2)",
               }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="rounded-xl"
+              transition={{ duration: 0.3 }}
             >
-              <Card className="flex flex-col justify-between h-full border border-blue-200 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow duration-300">
+              <Card className="flex flex-col justify-between h-full border border-blue-200 rounded-xl bg-white shadow-sm hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
-                  <div className="flex items-center space-x-5 mb-5">
+                  <div className="flex items-center space-x-4 mb-4">
                     {job.companyLogo ? (
                       <img
                         src={job.companyLogo}
                         alt={`${job.companyName} logo`}
-                        className="w-20 h-20 object-contain rounded-md border border-blue-100 shadow-sm"
+                        className="w-16 h-16 object-contain rounded-md border border-blue-100 shadow-sm"
                       />
                     ) : (
-                      <div className="w-20 h-20 bg-blue-50 rounded-md flex items-center justify-center text-blue-300 text-sm font-semibold select-none">
+                      <div className="w-16 h-16 bg-blue-100 rounded-md flex items-center justify-center text-blue-400 text-sm font-medium">
                         No Logo
                       </div>
                     )}
                     <div>
-                      <CardTitle className="text-2xl font-bold text-blue-800">
+                      <CardTitle className="text-xl font-semibold text-blue-800 break-words">
                         {job.jobTitle || "No Title"}
                       </CardTitle>
                       <CardDescription className="text-sm text-blue-600 font-medium">
@@ -153,30 +154,27 @@ function App() {
                 </CardHeader>
 
                 <CardContent>
-                  <p className="text-gray-700 line-clamp-5 leading-relaxed text-base font-normal">
+                  <p className="text-gray-700 line-clamp-4 leading-relaxed text-base">
                     {(job.jobDescription || "No description available")
                       .replace(/<[^>]*>?/gm, "")
-                      .slice(0, 180)}{" "}
+                      .slice(0, 180)}
                     ...
                   </p>
                 </CardContent>
 
-                <CardFooter className="flex justify-center">
+                <CardFooter className="flex justify-center mt-4">
                   <Dialog>
-                    <DialogTrigger
-                      className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition shadow-md"
-                      aria-label={`View details for ${job.jobTitle}`}
-                    >
+                    <DialogTrigger className="inline-block px-6 py-2 bg-blue-600 text-white text-sm font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
                       View Details
                     </DialogTrigger>
-                    <DialogContent className="max-w-3xl p-8 rounded-xl shadow-2xl bg-white">
+                    <DialogContent className="max-w-2xl w-full p-6 rounded-xl shadow-lg bg-white">
                       <DialogHeader>
-                        <DialogTitle className="text-4xl font-extrabold text-blue-900 tracking-tight">
+                        <DialogTitle className="text-3xl font-bold text-blue-900">
                           {job.jobTitle}
                         </DialogTitle>
                       </DialogHeader>
 
-                      <DialogDescription className="mt-6 text-gray-900 text-base space-y-6 prose prose-blue max-w-none font-medium">
+                      <DialogDescription className="mt-4 text-gray-800 text-base leading-relaxed space-y-4 prose max-w-none">
                         <div
                           dangerouslySetInnerHTML={{
                             __html:
@@ -184,34 +182,30 @@ function App() {
                           }}
                         />
 
-                        <div className="space-y-3 text-gray-700 text-sm font-semibold">
+                        <div className="space-y-2 text-sm font-medium">
                           <p>
-                            <span className="font-bold">Company:</span>{" "}
-                            {job.companyName || "N/A"}
+                            <strong>Company:</strong> {job.companyName || "N/A"}
                           </p>
                           <p>
-                            <span className="font-bold">Location:</span>{" "}
-                            {job.jobGeo || "Remote"}
+                            <strong>Location:</strong> {job.jobGeo || "Remote"}
                           </p>
                           <p>
-                            <span className="font-bold">Type:</span>{" "}
+                            <strong>Type:</strong>{" "}
                             {job.jobType ? job.jobType.join(", ") : "N/A"}
                           </p>
                           <p>
-                            <span className="font-bold">Published Date:</span>{" "}
-                            {job.pubDate || "N/A"}
+                            <strong>Published:</strong> {job.pubDate || "N/A"}
                           </p>
                         </div>
 
-                        <div className="mt-10 text-center">
+                        <div className="mt-6 text-center">
                           <a
                             href={job.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-block px-10 py-4 bg-blue-700 text-white font-bold rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-400 transition shadow-lg"
-                            aria-label={`Apply for ${job.jobTitle}`}
+                            className="inline-block px-8 py-3 bg-blue-700 text-white font-bold rounded-lg hover:bg-blue-800 transition"
                           >
-                            Apply Here
+                            Apply Now
                           </a>
                         </div>
                       </DialogDescription>
